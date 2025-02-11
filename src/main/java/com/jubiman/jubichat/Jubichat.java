@@ -95,6 +95,7 @@ public class Jubichat {
     public void onServerStopping(ServerStoppingEvent event) {
         connection.sendServerStateEvent("stopping");
         LOGGER.info("Closing JubiCord Socket connection");
+        connection.cancelReconnect();
         connection.close("Server is closing connection");
     }
 

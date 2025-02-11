@@ -112,7 +112,7 @@ public class WebSocketConnection implements WebSocket.Listener {
         WebSocket.Listener.super.onOpen(webSocket);
     }
 
-        private void sendLoop() {
+    private void sendLoop() {
         while (open) {
             try {
                 // TODO: convert to packet
@@ -171,7 +171,7 @@ public class WebSocketConnection implements WebSocket.Listener {
         WebSocket.Listener.super.onClose(webSocket, statusCode, reason);
         Jubichat.LOGGER.info("Jubi Socket closed with status code {} and reason: {}", statusCode, reason);
         this.open = false;
-        sendThread.stop();
+        this.sendThread.stop();
         this.webSocket = null;
         return null;
     }
@@ -194,7 +194,6 @@ public class WebSocketConnection implements WebSocket.Listener {
         } catch (Exception e) {
             Jubichat.LOGGER.error("Failed to close Jubi Socket.", e);
         }
-        sendThread.stop();
     }
 
     /**
@@ -249,6 +248,12 @@ public class WebSocketConnection implements WebSocket.Listener {
         
         open = true;
         sendThread.restart();
+    }
+
+    public void cancelReconnect() {
+        Jubichat.LOGGER.info("Cancelling reconnect timer.");
+        if (TIMER_TASK != null)
+            TIMER_TASK.cancel();
     }
 
     private static class WebsocketTimerTask extends TimerTask {
