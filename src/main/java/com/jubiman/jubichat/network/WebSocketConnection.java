@@ -126,9 +126,7 @@ public class WebSocketConnection implements WebSocket.Listener {
                     Jubichat.LOGGER.debug("Failed to send event to Jubi Socket.", e);
                 }
                 Jubichat.LOGGER.info("Sent event to Jubi Socket: {}", json);
-            } catch (InterruptedException e) {
-                Jubichat.LOGGER.error("Queue interrupted while sending message to Jubi Socket. See debug logs for more info.");
-                Jubichat.LOGGER.debug("Queue interrupted while sending message to Jubi Socket.", e);
+            } catch (InterruptedException ignored) {
             }
         }
         Jubichat.LOGGER.debug("Send loop closed.");
@@ -196,6 +194,7 @@ public class WebSocketConnection implements WebSocket.Listener {
         } catch (Exception e) {
             Jubichat.LOGGER.error("Failed to close Jubi Socket.", e);
         }
+        sendThread.stop();
     }
 
     /**
